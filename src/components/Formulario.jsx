@@ -1,18 +1,13 @@
 import React from 'react';
 
-const Formulario = ({ categories, selectedCategory, handleChange }) => {
+const Formulario = ({ categorias, onChangeCategoria }) => {
   return (
     <div>
-      <label htmlFor="categorySelect">Selecciona una categoría:</label>
-      <select
-        id="categorySelect"
-        value={selectedCategory}
-        onChange={(e) => handleChange(e.target.value)}
-      >
-        <option value="">Todas</option> {/* Opción predeterminada */}
-        {categories.map((category) => (
-          <option key={category.id} value={category.slug}>
-            {category.name}
+      <label htmlFor="selectCategoria">Buscar por categoria:</label>
+      <select id="selectCategoria" onChange={(e) => onChangeCategoria(e.target.value)}>
+        {categorias.map((categoria) => (
+          <option key={categoria} value={categoria}>
+            {categoria}
           </option>
         ))}
       </select>

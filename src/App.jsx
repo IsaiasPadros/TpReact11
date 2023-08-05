@@ -1,69 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Container } from 'react-bootstrap';
+import { getNoticiasPorCategoria } from './Api';
+import Titulo from './components/Titulo';
 import Formulario from './components/Formulario';
 import ListaNoticias from './components/ListaNoticias';
 
 const App = () => {
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [categorias, setCategorias] = useState([]);
+  const [selectedCategoria, setSelectedCategoria] = useState('general');
   const [noticias, setNoticias] = useState([]);
 
   useEffect(() => {
-    async function fetchData() {
-      const categoriesResponse = await fetchCategories();
-      setCategories(categoriesResponse);
-    }
-    fetchData();
-  }, []);
-
-  const fetchCategories = async () => {
-    try {
-      const response = await fetch('https://newsdata.io/api/1/news?apikey=pub_27255eeb9aed0b36610336db322bf162164af&category=science', {
-        headers: {
-         
-        },
-      });
-      const data = await response.json();
-      return data.categories;
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-      return [];
-    }
-  };
-
-  const handleCategoryChange = async (category) => {
-    setSelectedCategory(category);
-    const noticiasResponse = await fetchNewsByCategory(category);
-    setNoticias(noticiasResponse);
-  };
-
-  const fetchNewsByCategory = async (category) => {
-    try {
+    const fetchCategorias = async () => {
       const response = await fetch(
-        `https://newsdata.io/api/1/news?apikey=pub_27255eeb9aed0b36610336db322bf162164af&category=science`,
-        {
-          headers: {
-            
-          },
-        }
+        'https://newsapi.org/v2/top-headlines/sources?apiKey=1d48306703b04b5fac7248aa6e828190'
       );
       const data = await response.json();
-      return data.articles;
-    } catch (error) {
-      console.error(`Error fetching news for category ${category}:`, error);
-      return [];
-    }
-  };
+      const categorias = data.sources.map((source) => source.category);
+      setCategorias([...new Set(categorias)]);
+    };
+
+    fetchCategorias();
+  }, []);
+
+  useEffect(() => {
+    const fetchNoticiasPorCategoria = async () => {
+      const noticiasPorCategoria = await getNoticiasPorCategoria(selectedCategoria);
+      setNoticias(noticiasPorCategoria);
+    };
+
+    fetchNoticiasPorCategoria();
+  }, [selectedCategoria]);
 
   return (
-    <div className="container mt-4">
-      <h1>Noticias</h1>
-      <Formulario
-        categories={categories}
-        selectedCategory={selectedCategory}
-        handleChange={handleCategoryChange}
-      />
+    <Container>
+      <Titulo />
+      <Formulario categorias={categorias} onChangeCategoria={setSelectedCategoria} />
       <ListaNoticias noticias={noticias} />
-    </div>
+    </Container>
   );
 };
 

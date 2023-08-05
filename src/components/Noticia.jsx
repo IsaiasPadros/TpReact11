@@ -1,16 +1,25 @@
 import React from 'react';
+import { Card } from 'react-bootstrap';
+import defaultImage from '../assets/NPCfoto.jpg'; 
 
 const Noticia = ({ noticia }) => {
-  const { Titulo, description, url, urlToImage } = noticia;
   return (
-    <div>
-      <h3>{Titulo}</h3>
-      <img src={urlToImage} alt={Titulo} />
-      <p>{description}</p>
-      <a href={url} target="_blank" rel="noopener noreferrer">
-        Leer más
-      </a>
-    </div>
+    <Card>
+      <div className="image-container">
+        <Card.Img
+          variant="top"
+          src={noticia.urlToImage || defaultImage}
+          onError={(e) => e.target.src = defaultImage}
+        />
+      </div>
+      <Card.Body>
+        <Card.Title>{noticia.title}</Card.Title>
+        <Card.Text>{noticia.description}</Card.Text>
+        <a href={noticia.url} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+          Ver noticia completa
+        </a>
+      </Card.Body>
+    </Card>
   );
 };
 
