@@ -19,7 +19,7 @@ const App = () => {
     try {
       const response = await fetch('https://newsdata.io/api/1/news?apikey=pub_27255eeb9aed0b36610336db322bf162164af&category=science', {
         headers: {
-          mode: 'no-cors'
+         
         },
       });
       const data = await response.json();
@@ -42,7 +42,7 @@ const App = () => {
         `https://newsdata.io/api/1/news?apikey=pub_27255eeb9aed0b36610336db322bf162164af&category=science`,
         {
           headers: {
-            mode: 'no-cors'
+            
           },
         }
       );
